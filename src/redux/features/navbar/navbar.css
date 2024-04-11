@@ -1,0 +1,9 @@
+.nav-link {
+  color: black;
+}
+.navbar-buttons {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 1rem;
+}

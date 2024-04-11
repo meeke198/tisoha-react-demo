@@ -3,6 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
+import './navbar.css'
 const NavBar = () => {
   return (
     <>
@@ -13,27 +14,19 @@ const NavBar = () => {
             width: "100vw",
             margin: 0,
             marginTop: 0,
-            backgroundColor: "pink",
+            backgroundColor: "#77B0AA",
           }}
         >
           <Toolbar>
             <MenuIcon sx={{ color: "black" }} />
-            <div
-              className="navbar-buttons"
-              style={{
-                display: "flex",
-                flex: "1",
-                justifyContent: "flex-end",
-                gap: "1rem",
-              }}
-            >
-              <Link style={{ color: "black" }} to="/">
+            <div className="navbar-buttons">
+              <Link className="nav-link" to="/">
                 Home
               </Link>
-              <Link style={{ color: "black" }} to="/posts">
+              <Link className="nav-link" to="/posts">
                 Posts
               </Link>
-              <Link style={{ color: "black" }} to="/posts/create">
+              <Link className="nav-link" to="/posts/create">
                 Create post
               </Link>
             </div>
