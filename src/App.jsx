@@ -1,7 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./redux/features/pages/Home";
-// import PostLayout from "./redux/features/posts/NavBar";
 import NavBar from "./redux/features/navbar/NavBar";
 import {PostRoutes} from "./routes/PostRoutes";
 function App() {

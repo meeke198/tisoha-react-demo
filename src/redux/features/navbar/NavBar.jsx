@@ -27,7 +27,7 @@ const NavBar = () => {
                 gap: "1rem",
               }}
             >
-              <Link style={{ color: "black" }} to="/home">
+              <Link style={{ color: "black" }} to="/">
                 Home
               </Link>
               <Link style={{ color: "black" }} to="/posts">
