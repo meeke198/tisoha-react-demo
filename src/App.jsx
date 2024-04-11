@@ -1,12 +1,19 @@
-import './App.css'
-import { BrowserRouter, Route } from "react-router-dom";
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import Home from "./redux/features/pages/Home";
+// import PostLayout from "./redux/features/posts/NavBar";
+import NavBar from "./redux/features/posts/NavBar";
+import {PostRoutes} from "./routes/PostRoutes";
 function App() {
   return (
     <>
-      <BrowserRouter>
-      </BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/posts/*" element={<PostRoutes />} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App;
