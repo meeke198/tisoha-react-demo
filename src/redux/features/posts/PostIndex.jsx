@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import { fetchPosts } from "./postSlice";
 import "./post.css";
 const PostIndex = () => {
-  const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
+  const [posts, setPosts] = useState([]);
   console.log({ posts });
   useEffect(() => {
     console.log("IN USE EFFECT");
     const fetchPostsData = async () => {
-      const postsData = await dispatch(fetchPosts());
-      console.log({ postsData });
+      let postsData = await dispatch(fetchPosts());
+    //   console.log({ postsData });
       setPosts(postsData.payload);
     };
     fetchPostsData();

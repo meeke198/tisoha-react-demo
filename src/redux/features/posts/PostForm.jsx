@@ -17,25 +17,17 @@ import { useNavigate } from "react-router-dom";
 import { createPost } from "./postSlice";
 const PostForm = () => {
   const navigate = useNavigate();
-  const [newId, setNewId] = useState(11);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const dispatch = useDispatch();
-
-
-  console.log({title});
-  console.log({content});
-  console.log({newId});
   const handleSubmit = (event) => {
     event.preventDefault();
     const newPost = {
-      id: newId,
       title: title,
       content: content,
     };
     console.log({ newPost });
     dispatch(createPost(newPost));
-    setNewId((prev) => prev + 1);
     navigate("/posts");
   };
   return (

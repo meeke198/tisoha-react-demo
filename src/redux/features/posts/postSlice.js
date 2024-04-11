@@ -16,14 +16,17 @@ export const fetchPosts = createAsyncThunk("post/fetchPosts", async () => {
 });
 
 export const createPost = createAsyncThunk("post/createPost", async (newPost) => {
-  const response = await axios.post(
-    "https://jsonplaceholder.typicode.com/posts",
-    newPost
-  );
-  const returnPost = response.data;
-  console.log({ returnPost });
-  return returnPost;
+  await fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    body: JSON.stringify(newPost),
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
 });
+
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
