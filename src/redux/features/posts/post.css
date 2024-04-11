@@ -15,3 +15,9 @@
   font-size: 14px;
   line-height: 1.5;
 }
+.form-container{
+    padding: 1rem;
+    background: #E8EFCF;
+    color: black;
+    margin: 3rem auto;
+}

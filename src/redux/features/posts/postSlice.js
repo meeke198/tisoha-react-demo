@@ -14,15 +14,22 @@ export const fetchPosts = createAsyncThunk("post/fetchPosts", async () => {
   console.log({ posts });
   return firstTen;
 });
+
+export const createPost = createAsyncThunk("post/createPost", async (newPost) => {
+  const response = await axios.post(
+    "https://jsonplaceholder.typicode.com/posts",
+    newPost
+  );
+  const returnPost = response.data;
+  console.log({ returnPost });
+  return returnPost;
+});
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPosts.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.posts = action.payload;
@@ -30,6 +37,9 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.posts.push(action.payload);
       });
   }
 });
