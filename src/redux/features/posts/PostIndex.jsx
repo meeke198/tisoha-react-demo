@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { useDispatch} from "react-redux";
-import { fetchPosts } from "./postSlice";
+import { fetchPosts, deletePost } from "./postSlice";
+import Button from "@mui/material/Button";
 import "./post.css";
+import PostForm from "./PostForm";
+
 const PostIndex = () => {
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
-  console.log({ posts });
+    const [isEdit, setIsEdit] = useState(false);
+    const [editingPost, setEditingPost] = useState({});
+//   console.log({ posts });
   useEffect(() => {
     console.log("IN USE EFFECT");
     const fetchPostsData = async () => {
@@ -18,15 +23,37 @@ const PostIndex = () => {
   const renderedPosts = posts?.map((post, index) => (
     <article className="post-article" key={`${index}`}>
       <h3>{post?.title}</h3>
-      {/* {console.log("IN RENDER POST")}
-      {console.log(post)} */}
       <p className="post-content">{post?.body}</p>
+      <Button
+        onClick={() => handleEdit(post.id)}
+        sx={{ marginRight: "1rem" }}
+        variant="contained"
+      >
+        Edit
+      </Button>
+      <Button onClick={() => handleDelete(post.id)} variant="outlined" color="error">
+        Delete
+      </Button>
     </article>
   ));
+  const handleEdit = (id) => {
+    console.log({ id });
+    setIsEdit(true);
+    // handleUseRef();
+   let updatePost = posts.find((post) => post.id === id);
+    // setContent(updatePost.body);
+    // setTitle(updatePost.title);
+    console.log({ updatePost });
+    setEditingPost(updatePost);
+  };
+  const handleDelete = (id) => {
+    dispatch(deletePost);
+  };
   return (
     <>
       <div>This is post index page</div>
       <div>{renderedPosts}</div>
+      {isEdit && <PostForm isEdit={isEdit} post={editingPost} />}
     </>
   );
 };

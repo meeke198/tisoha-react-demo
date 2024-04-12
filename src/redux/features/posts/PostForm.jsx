@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 // import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,26 +14,51 @@ import Typography from "@mui/material/Typography";
 import "./post.css";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "./postSlice";
-const PostForm = () => {
+import { createPost, editingPost } from "./postSlice";
+const PostForm = ({ isEdit, post }) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [body, setBody] = useState("");
   const dispatch = useDispatch();
+  //   console.log("propPost:", post);
+  //   console.log("title:", title);
+  //   console.log("body:", body);
+  console.log("IS EDIT:", isEdit);
+  useEffect(() => {
+    if (isEdit) {
+      setTitle(post.title);
+      setBody(post.body);
+    }
+
+    console.log("IN USE EFFECT");
+  }, []);
+
   const handleSubmit = (event) => {
-    event.preventDefault();
-    const newPost = {
-      title: title,
-      content: content,
-    };
-    console.log({ newPost });
-    dispatch(createPost(newPost));
-    navigate("/posts");
+    if (isEdit) {
+      console.log("in the else");
+      const editPost = {
+        id: post?.id,
+        title: title,
+        body: body,
+      };
+      dispatch(editingPost(editPost));
+      //   navigate("/posts");
+    } else {
+      event.preventDefault();
+      const newPost = {
+        title: title,
+        body: body,
+      };
+      console.log({ newPost });
+      dispatch(createPost(newPost));
+    }
+    // navigate("/posts");
   };
+
   return (
     <div className="form-container">
       <Typography component="h1" variant="h5">
-        Create new post
+        {isEdit ? "" : "Create new post"}
       </Typography>
       <Box
         className="form-container"
@@ -61,8 +86,8 @@ const PostForm = () => {
           name="content"
           type="text"
           id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
           placeholder="Enter post content here"
         />
         <Button
@@ -71,7 +96,7 @@ const PostForm = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Create post
+          {isEdit ? "Edit post" : "Create post"}
         </Button>
       </Box>
     </div>

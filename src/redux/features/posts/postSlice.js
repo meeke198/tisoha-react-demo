@@ -26,11 +26,48 @@ export const createPost = createAsyncThunk("post/createPost", async (newPost) =>
     .then((response) => response.json())
     .then((json) => console.log(json));
 });
-
+export const editingPost = createAsyncThunk(
+  "post/editingPost",
+  async (updatedPost) => {
+    console.log("in editingPost Slice");
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${updatedPost.id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          id: updatedPost.id,
+          title: updatedPost.title,
+          body: updatedPost.body,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    );
+    const json = await response.json();
+    console.log({ json });
+    return json;
+  }
+);
+export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
+  await fetch(`https://jsonplaceholder.typicode.com/posts/{id}`, {
+    method: "DELETE",
+  });
+  return id;
+});
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    // editPost: (state, action) => {
+    //   state.posts.map((post) => {
+    //     if (post.id === action.payload.id) {
+    //       post.title = action.payload.title;
+    //       post.body = action.payload.body;
+    //     }
+    //   });
+    // },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.fulfilled, (state, action) => {
@@ -43,7 +80,18 @@ export const postsSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.posts.push(action.payload);
+      })
+      .addCase(editingPost.fulfilled, (state, action) => {
+        state.posts = state.posts.map((post) => {
+          if (post.id === action.payload.id) {
+            post = action.payload;
+          }
+        })
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
       });
-  }
+  },
 });
+// export const { editPost } = postsSlice.actions;
 export default postsSlice.reducer;
