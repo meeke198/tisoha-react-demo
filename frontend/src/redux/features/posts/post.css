@@ -1,0 +1,25 @@
+.post-article {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #003C43;
+  color: white;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.post-content {
+  font-size: 14px;
+  line-height: 1.5;
+  color: white;
+}
+.form-container{
+    padding: 1rem;
+    background: #E8EFCF;
+    /* color: black; */
+    margin: 3rem auto;
+}
