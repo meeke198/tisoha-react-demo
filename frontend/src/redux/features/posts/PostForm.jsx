@@ -4,34 +4,38 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "./post.css";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createPost, editingPost } from "./postSlice";
-const PostForm = ({ isEdit, post }) => {
-  const navigate = useNavigate();
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { createPost, editPost, fetchPost } from "./postSlice";
+const PostForm = () => {
+  // const navigate = useNavigate();
+    const { id } = useParams();
+  const editStatus = useSelector((state) => state.posts.editStatus);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const dispatch = useDispatch();
-  console.log("IS EDIT:", isEdit);
-  useEffect(() => {
-    if (isEdit) {
-      setTitle(post.title);
-      setBody(post.body);
-    }
-
-    console.log("IN USE EFFECT");
-  }, []);
-
+  console.log("id params:", id);
+ useEffect(() => {
+   if (editStatus) {
+   console.log("IN USE EFFECT");
+   const fetchPostData = async () => {
+     let postData = await dispatch(fetchPost(id));
+     setTitle(postData.payload?.title);
+     setBody(postData.payload?.body);
+   };
+   fetchPostData();
+  }
+ }, [dispatch]);
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (isEdit) {
+    if (editStatus) {
       console.log("in the else");
-      const editPost = {
-        id: post?.id,
-        title: title,
-        body: body,
-      };
-      dispatch(editingPost(editPost));
+      // const updatePost = {
+      //   ...post,
+      //   title: title,
+      //   body: body,
+      // };
+      // dispatch(editPost(updatePost));
     } else {
       const newPost = {
         title: title,
@@ -39,16 +43,16 @@ const PostForm = ({ isEdit, post }) => {
       };
       console.log({ newPost });
       dispatch(createPost(newPost));
-       setTitle("");
-       setBody("");
+      setTitle("");
+      setBody("");
     }
-    navigate("/posts");
+    // navigate("/posts");
   };
 
   return (
     <div className="form-container">
       <Typography component="h1" variant="h5">
-        {isEdit ? "" : "Create new post"}
+        {editStatus ? "" : "Create new post"}
       </Typography>
       <Box
         className="form-container"
@@ -86,7 +90,7 @@ const PostForm = ({ isEdit, post }) => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {isEdit ? "Edit post" : "Create post"}
+          {editStatus ? "Edit post" : "Create post"}
         </Button>
       </Box>
     </div>

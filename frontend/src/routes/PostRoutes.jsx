@@ -9,6 +9,7 @@ export function PostRoutes() {
       <Route path="/" element={<PostIndex />} />
       <Route path=":id" element={<PostShow />} />
       <Route path="form" element={<PostForm />} />
+      <Route path="form/:id" element={<PostForm />} />
     </Routes>
 
   );
