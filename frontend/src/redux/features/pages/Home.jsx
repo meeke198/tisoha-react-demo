@@ -2,7 +2,7 @@ import './home.css'
 const Home = () => {
   return (
     <>
-      This is a home page
+      This is home page
     </>
   );
 }

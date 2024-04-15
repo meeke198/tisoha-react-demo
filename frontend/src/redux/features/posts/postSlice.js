@@ -34,10 +34,8 @@ export const createPost = createAsyncThunk("post/createPost", async (newPost) =>
 export const editPost = createAsyncThunk(
   "post/editPost",
   async (updatedPost) => {
-    const response = await axios.put(
-      `${URI}/${updatedPost._id}`,
-      updatedPost
-    );
+    const response = await axios.put(`${URI}/${updatedPost.id}`, updatedPost);
+    // console.log({ response });
     return response.data;
   }
 );

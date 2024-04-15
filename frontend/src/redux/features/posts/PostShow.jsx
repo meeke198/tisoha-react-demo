@@ -11,7 +11,7 @@ const PostShow = ({post}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const editStatus = useSelector((state)=> state.posts?.editStatus);
-  const handleEdit = () => {
+  const handleSubmit = () => {
     dispatch(setEditStatus(true));
     navigate(`./form/${post._id}`);
   };
@@ -22,7 +22,7 @@ const PostShow = ({post}) => {
     <article className="post-article" key={`${post?._id}`}>
       <h3>{post?.title}</h3>
       <p className="post-content">{post?.body}</p>
-      <Button onClick={handleEdit} sx={{ marginRight: "1rem" }} variant="contained">
+      <Button onClick={handleSubmit} sx={{ marginRight: "1rem" }} variant="contained">
         Edit post
       </Button>
       <Button
