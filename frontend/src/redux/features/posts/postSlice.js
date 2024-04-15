@@ -1,55 +1,41 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
 const URI = "http://localhost:5001/posts";
-const initialState = {
-  editStatus: false,
-  posts: [],
-  error: null,
-};
-export const fetchPosts = createAsyncThunk("post/fetchPosts", async () => {
+
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const response = await axios.get(URI);
-  const posts = response.data;
-  console.log({ posts });
-  return posts;
+  return response.data;
 });
 
-export const fetchPost = createAsyncThunk("post/fetchPost", async (id) => {
+export const fetchPost = createAsyncThunk("posts/fetchPost", async (id) => {
   const response = await axios.get(`${URI}/${id}`);
-  const post = response.data;
-  console.log({ post });
-  return post;
+  return response.data;
 });
-//?
-export const createPost = createAsyncThunk("post/createPost", async (newPost) => {
-  await fetch(URI, {
-    method: "POST",
-    body: JSON.stringify(newPost),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
-  })
-    .then((response) => response.json())
-    .then((json) => console.log(json));
+
+export const createPost = createAsyncThunk("posts/createPost", async (newPost) => {
+  const response = await axios.post(URI, newPost);
+  return response.data;
 });
-export const editPost = createAsyncThunk(
-  "post/editPost",
-  async (updatedPost) => {
-    const response = await axios.put(`${URI}/${updatedPost.id}`, updatedPost);
-    // console.log({ response });
-    return response.data;
-  }
-);
+
+export const editPost = createAsyncThunk("posts/editPost", async (updatedPost) => {
+  const response = await axios.put(`${URI}/${updatedPost.id}`, updatedPost);
+  return response.data;
+});
 
 export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
-  await fetch(`${URI}/${id}`, {
-    method: "DELETE",
-  });
-  console.log(`post ${id} is deleted`);
+  await axios.delete(`${URI}/${id}`);
   return id;
 });
-export const postsSlice = createSlice({
+
+const postsSlice = createSlice({
   name: "posts",
-  initialState,
+  initialState: {
+    editStatus: false,
+    posts: [],
+    error: null,
+  },
   reducers: {
     setEditStatus: (state, action) => {
       state.editStatus = action.payload;
@@ -67,15 +53,16 @@ export const postsSlice = createSlice({
         state.posts.push(action.payload);
       })
       .addCase(editPost.fulfilled, (state, action) => {
-        const updatedPostIndex = state.posts.findIndex(
-          (post) => post.id === action.payload.id
-        );
-        state.posts[updatedPostIndex] = action.payload;
+        const updatedPostIndex = state.posts.findIndex((post) => post._id === action.payload._id);
+        if (updatedPostIndex !== -1) {
+          state.posts[updatedPostIndex] = action.payload;
+        }
       })
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter((post) => post.id !== action.payload);
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
       });
   },
 });
+
 export const { setEditStatus } = postsSlice.actions;
 export default postsSlice.reducer;

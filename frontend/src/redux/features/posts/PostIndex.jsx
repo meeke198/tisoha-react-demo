@@ -1,30 +1,30 @@
-
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts } from "./postSlice";
+import { fetchPosts, deletePost } from "./postSlice";
 import PostShow from "./PostShow";
 
 const PostIndex = () => {
   const dispatch = useDispatch();
-  const [posts, setPosts] = useState([]);
-console.log({posts});
+  const posts = useSelector((state) => state.posts.posts);
 
   useEffect(() => {
-    console.log("IN USE EFFECT");
-    const fetchPostsData = async () => {
-      let postsData = await dispatch(fetchPosts());
-      setPosts(postsData.payload);
-    };
-    fetchPostsData();
+    dispatch(fetchPosts());
   }, [dispatch]);
-  const renderedPosts = posts?.map((post) => (
-    <PostShow key={post._id} post={post} />
-  ));
+
+  const handleDelete = (id) => {
+    dispatch(deletePost(id)).then(() => {
+      dispatch(fetchPosts());
+    });
+  };
 
   return (
     <>
       <div>This is the post index page</div>
-      <div>{renderedPosts}</div>
+      <div>
+        {posts?.map((post) => (
+          <PostShow key={post?._id} post={post} onDelete={handleDelete} />
+        ))}
+      </div>
     </>
   );
 };
